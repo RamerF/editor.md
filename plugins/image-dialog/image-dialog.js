@@ -119,7 +119,7 @@
 
                             //删除对话框
                             this.remove();
-                            
+
                             return false;
                         }]
                     }
@@ -166,6 +166,7 @@
 
                             json = (typeof JSON.parse !== "undefined") ? JSON.parse(json) : eval("(" + json + ")");
 
+                            json = settings.imageUploadMsgHandler ? settings.imageUploadMsgHandler(json) : json;
                             if(!settings.crossDomainUpload)
                             {
                               if (json.success === 1)

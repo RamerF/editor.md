@@ -1,8 +1,8 @@
 /*
  * Editor.md
  *
- * @file        editormd.js 
- * @version     v1.5.1 
+ * @file        editormd.js
+ * @version     v1.5.1
  * @description Open source online markdown editor.
  * @license     MIT License
  * @author      Pandao
@@ -140,6 +140,8 @@
         imageUpload          : false,
         imageFormats         : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
         imageUploadURL       : "",
+        // 处理json数据
+        imageUploadMsgHandler: null,
         imageUploadFields    : "", // append upload form fields for CRSF etc. Server-side receives the POST parameters. v1.5.1+
         imageUploadCallback  : function() {}, // set image upload finish (success or failure) callback handler v1.5.1+
         imageUploadCallbackName : '__Editor_md_ImageUploadCallback', // upload callback name for cross-domain upload v1.5.1+

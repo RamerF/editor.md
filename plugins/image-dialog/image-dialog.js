@@ -26,6 +26,7 @@
             var selection   = cm.getSelection();
             var imageLang   = lang.dialog.image;
             var classPrefix = this.classPrefix;
+            var imageUploadFieldName = settings.imageUploadFieldName;
             var iframeName  = classPrefix + "image-iframe";
 			var dialogName  = classPrefix + pluginName, dialog;
 
@@ -47,21 +48,21 @@
                 }
 
                 var dialogContent = ( (settings.imageUpload) ? "<form action=\"" + action +"\" target=\"" + iframeName + "\" method=\"post\" enctype=\"multipart/form-data\" class=\"" + classPrefix + "form\">" : "<div class=\"" + classPrefix + "form\">" ) +
-                                        ( (settings.imageUpload) ? "<iframe name=\"" + iframeName + "\" id=\"" + iframeName + "\" guid=\"" + guid + "\"></iframe>" : "" ) +
-                                        "<label>" + imageLang.url + "</label>" +
-                                        "<input type=\"text\" data-url />" + (function(){
-                                            return (settings.imageUpload) ? "<div class=\"" + classPrefix + "file-input\">" +
-                                                                                "<input type=\"file\" name=\"" + classPrefix + "image-file\" accept=\"image/*\" />" +
-                                                                                "<input type=\"submit\" value=\"" + imageLang.uploadButton + "\" />" +
-                                                                            "</div>" : "";
-                                        })() +
-                                        "<br/>" +
-                                        "<label>" + imageLang.alt + "</label>" +
-                                        "<input type=\"text\" value=\"" + selection + "\" data-alt />" +
-                                        "<br/>" +
-                                        "<label>" + imageLang.link + "</label>" +
-                                        "<input type=\"text\" value=\"http://\" data-link />" +
-                                        "<br/>" +
+                                    ( (settings.imageUpload) ? "<iframe name=\"" + iframeName + "\" id=\"" + iframeName + "\" guid=\"" + guid + "\"></iframe>" : "" ) +
+                                    "<label>" + imageLang.url + "</label>" +
+                                    "<input type=\"text\" data-url />" + (function(){
+                        return (settings.imageUpload) ? "<div class=\"" + classPrefix + "file-input\">" +
+                                                        "<input type=\"file\" name=\"" + (imageUploadFieldName ? imageUploadFieldName : (classPrefix + "image-file"))+"\" accept=\"image/*\" />" +
+                                                        "<input type=\"submit\" value=\"" + imageLang.uploadButton + "\" />" +
+                                                        "</div>" : "";
+                    })() +
+                                    "<br/>" +
+                                    "<label>" + imageLang.alt + "</label>" +
+                                    "<input type=\"text\" value=\"" + selection + "\" data-alt />" +
+                                    "<br/>" +
+                                    "<label>" + imageLang.link + "</label>" +
+                                    "<input type=\"text\" value=\"http://\" data-link />" +
+                                    "<br/>" +
                                     ( (settings.imageUpload) ? "</form>" : "</div>");
 
                 //var imageFooterHTML = "<button class=\"" + classPrefix + "btn " + classPrefix + "image-manager-btn\" style=\"float:left;\">" + imageLang.managerButton + "</button>";
@@ -91,7 +92,7 @@
                                 return false;
                             }
 
-							var altAttr = (alt !== "") ? " \"" + alt + "\"" : "";
+                            var altAttr = (alt !== "") ? " \"" + alt + "\"" : "";
 
                             if (link === "" || link === "http://")
                             {
@@ -127,29 +128,29 @@
 
                 dialog.attr("id", classPrefix + "image-dialog-" + guid);
 
-				if (!settings.imageUpload) {
+                if (!settings.imageUpload) {
                     return ;
                 }
 
-				var fileInput  = dialog.find("[name=\"" + classPrefix + "image-file\"]");
+                var fileInput  = dialog.find("[name=\"" + (imageUploadFieldName ? imageUploadFieldName : (classPrefix + "image-file")) + "\"]");
 
-				fileInput.bind("change", function() {
-					var fileName  = fileInput.val();
-					var isImage   = new RegExp("(\\.(" + settings.imageFormats.join("|") + "))$", "i"); // /(\.(webp|jpg|jpeg|gif|bmp|png))$/
+                fileInput.bind("change", function() {
+                    var fileName  = fileInput.val();
+                    var isImage   = new RegExp("(\\.(" + settings.imageFormats.join("|") + "))$", "i"); // /(\.(webp|jpg|jpeg|gif|bmp|png))$/
 
-					if (fileName === "")
-					{
-						alert(imageLang.uploadFileEmpty);
+                    if (fileName === "")
+                    {
+                        alert(imageLang.uploadFileEmpty);
 
                         return false;
-					}
+                    }
 
                     if (!isImage.test(fileName))
-					{
-						alert(imageLang.formatNotAllowed + settings.imageFormats.join(", "));
+                    {
+                        alert(imageLang.formatNotAllowed + settings.imageFormats.join(", "));
 
                         return false;
-					}
+                    }
 
                     loading(true);
 
@@ -169,14 +170,14 @@
                             json = settings.imageUploadMsgHandler ? settings.imageUploadMsgHandler(json) : json;
                             if(!settings.crossDomainUpload)
                             {
-                              if (json.success === 1)
-                              {
-                                  dialog.find("[data-url]").val(json.url);
-                              }
-                              else
-                              {
-                                  alert(json.message);
-                              }
+                                if (json.success === 1)
+                                {
+                                    dialog.find("[data-url]").val(json.url);
+                                }
+                                else
+                                {
+                                    alert(json.message);
+                                }
                             }
 
                             return false;
@@ -184,45 +185,45 @@
                     };
 
                     dialog.find("[type=\"submit\"]").bind("click", submitHandler).trigger("click");
-				});
+                });
             }
 
-			dialog = editor.find("." + dialogName);
-			dialog.find("[type=\"text\"]").val("");
-			dialog.find("[type=\"file\"]").val("");
-			dialog.find("[data-link]").val("http://");
+            dialog = editor.find("." + dialogName);
+            dialog.find("[type=\"text\"]").val("");
+            dialog.find("[type=\"file\"]").val("");
+            dialog.find("[data-link]").val("http://");
 
-			this.dialogShowMask(dialog);
-			this.dialogLockScreen();
-			dialog.show();
+            this.dialogShowMask(dialog);
+            this.dialogLockScreen();
+            dialog.show();
 
-		};
+        };
 
-	};
+    };
 
-	// CommonJS/Node.js
-	if (typeof require === "function" && typeof exports === "object" && typeof module === "object")
+    // CommonJS/Node.js
+    if (typeof require === "function" && typeof exports === "object" && typeof module === "object")
     {
         module.exports = factory;
     }
-	else if (typeof define === "function")  // AMD/CMD/Sea.js
+    else if (typeof define === "function")  // AMD/CMD/Sea.js
     {
-		if (define.amd) { // for Require.js
+        if (define.amd) { // for Require.js
 
-			define(["editormd"], function(editormd) {
+            define(["editormd"], function(editormd) {
                 factory(editormd);
             });
 
-		} else { // for Sea.js
-			define(function(require) {
+        } else { // for Sea.js
+            define(function(require) {
                 var editormd = require("./../../editormd");
                 factory(editormd);
             });
-		}
-	}
-	else
-	{
+        }
+    }
+    else
+    {
         factory(window.editormd);
-	}
+    }
 
 })();

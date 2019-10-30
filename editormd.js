@@ -140,6 +140,8 @@
         imageUpload          : false,
         imageFormats         : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
         imageUploadURL       : "",
+        // 上传文件字段名,即 input 标签name属性
+        imageUploadFieldName : '',
         // 处理json数据
         imageUploadMsgHandler: null,
         imageUploadFields    : "", // append upload form fields for CRSF etc. Server-side receives the POST parameters. v1.5.1+
